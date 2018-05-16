@@ -1,14 +1,22 @@
 package com.deepak.springdataonetoonemappingexamples.domain;
 
 import lombok.Data;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
 @Data
+@EntityListeners(AuditingEntityListener.class)
+
 public class UserProfile implements Serializable{
 
     @Id
@@ -18,6 +26,14 @@ public class UserProfile implements Serializable{
     @Column(name = "phone_number")
     @Size(max = 15)
     private String phoneNumber;
+
+    @LastModifiedBy
+    @Column(nullable = false)
+    private String modifiedBy;
+
+    @CreatedBy
+    @Column(nullable = false, updatable = false)
+    private String createdBy;
 
     @Enumerated(EnumType.STRING)
     @Column(length = 10)
@@ -48,6 +64,14 @@ public class UserProfile implements Serializable{
     @Column(name = "zip_code")
     @Size(max = 32)
     private String zipCode;
+
+    @Column(name = "created_date", nullable = false, updatable = false)
+    @CreatedDate
+    private LocalDateTime createdDate;
+
+    @Column(name = "modified_date")
+    @LastModifiedDate
+    private LocalDateTime  modifiedDate;
 
    /* //working mapping
    @OneToOne(fetch = FetchType.LAZY)
